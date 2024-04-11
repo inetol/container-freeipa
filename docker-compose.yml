@@ -1,0 +1,38 @@
+services:
+  freeipa:
+    image: quay.io/freeipa/freeipa-server:rocky-9
+    container_name: freeipa
+    # You want to use `authbind` to bind to ports <1024 on rootless containers.
+    ports:
+      # DNS (passthrough) (Disabled by default, flag `--enable-dns` must be set):
+      #- "53:53"
+      #- "53:53/udp"
+      # HTTP:
+      - "127.0.0.1:60000:80"
+      # Kerberos (passthrough):
+      - "88:88"
+      - "88:88/udp"
+      # NTP (passthrough) (Disabled, remove flag `--no-ntp` to enable):
+      #- "123:123/udp"
+      # LDAP (passthrough):
+      - "389:389"
+      # HTTPS
+      - "127.0.0.1:60001:443"
+      # kpasswd (passthrough):
+      - "464:464"
+      - "464:464/udp"
+      # LDAPS (passthrough):
+      - "636:636"
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+    env_file:
+      - ./.env.freeipa
+    volumes:
+      - freeipa-data:/data
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  freeipa-data:

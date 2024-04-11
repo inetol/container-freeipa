@@ -1,0 +1,5 @@
+*
+!.env.freeipa.example
+!.gitignore
+!docker-compose.yml
+!README
